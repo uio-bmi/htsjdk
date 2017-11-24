@@ -25,7 +25,7 @@ package htsjdk.tribble.readers;
 
 import htsjdk.samtools.seekablestream.ISeekableStreamFactory;
 import htsjdk.samtools.seekablestream.SeekableStream;
-import htsjdk.samtools.seekablestream.SeekableStreamFactory;
+import htsjdk.samtools.seekablestream.SeekableRESStreamFactory;
 import htsjdk.samtools.util.BlockCompressedInputStream;
 import htsjdk.tribble.util.ParsingUtils;
 import htsjdk.tribble.util.TabixUtils;
@@ -106,7 +106,7 @@ public class TabixReader {
      * @param filePath path to the data file/uri
      */
     public TabixReader(final String filePath) throws IOException {
-        this(filePath, null, SeekableStreamFactory.getInstance().getBufferedStream(SeekableStreamFactory.getInstance().getStreamFor(filePath)));
+        this(filePath, null, SeekableRESStreamFactory.getInstance().getBufferedStream(SeekableRESStreamFactory.getInstance().getStreamFor(filePath)));
     }
 
     /**
@@ -114,7 +114,7 @@ public class TabixReader {
      * @param indexPath Full path to the index file. Auto-generated if null
      */
     public TabixReader(final String filePath, final String indexPath) throws IOException {
-        this(filePath, indexPath, SeekableStreamFactory.getInstance().getBufferedStream(SeekableStreamFactory.getInstance().getStreamFor(filePath)));
+        this(filePath, indexPath, SeekableRESStreamFactory.getInstance().getBufferedStream(SeekableRESStreamFactory.getInstance().getStreamFor(filePath)));
     }
 
     /**
@@ -126,7 +126,7 @@ public class TabixReader {
     public TabixReader(final String filePath, final String indexPath,
                        final Function<SeekableByteChannel, SeekableByteChannel> wrapper,
                        final Function<SeekableByteChannel, SeekableByteChannel> indexWrapper) throws IOException {
-        this(filePath, indexPath, SeekableStreamFactory.getInstance().getBufferedStream(SeekableStreamFactory.getInstance().getStreamFor(filePath, wrapper)), indexWrapper);
+        this(filePath, indexPath, SeekableRESStreamFactory.getInstance().getBufferedStream(SeekableRESStreamFactory.getInstance().getStreamFor(filePath, wrapper)), indexWrapper);
     }
 
 
@@ -272,8 +272,9 @@ public class TabixReader {
             }
             // the linear index
             mIndex[i].l = new long[readInt(is)];
-            for (k = 0; k < mIndex[i].l.length; ++k)
+            for (k = 0; k < mIndex[i].l.length; ++k) {
                 mIndex[i].l[k] = readLong(is);
+            }
         }
         // close
         is.close();
@@ -283,7 +284,7 @@ public class TabixReader {
      * Read the Tabix index from the default file.
      */
     private void readIndex() throws IOException {
-        final ISeekableStreamFactory ssf = SeekableStreamFactory.getInstance();
+        final ISeekableStreamFactory ssf = SeekableRESStreamFactory.getInstance();
         readIndex(ssf.getBufferedStream(ssf.getStreamFor(mIndexPath, mIndexWrapper), 128000));
     }
 
