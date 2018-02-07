@@ -5,6 +5,13 @@
   <groupId>com.github.samtools</groupId>
   <artifactId>htsjdk</artifactId>
   <version>2.13.1-2-g46e6590-SNAPSHOT</version>
+  <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.apache.commons</groupId>
