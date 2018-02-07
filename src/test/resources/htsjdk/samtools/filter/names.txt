@@ -1,3 +1,0 @@
-Read1_filter shouldn't affect    anything
-Read2_filter
-Hello_filter
